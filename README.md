@@ -25,8 +25,7 @@ This project provides three main scripts that work together to automate the depl
 ## Prerequisites
 
 - Linux system (tested on Ubuntu/Debian)
-- Docker and Docker Compose installed
-- SteamCMD installed and accessible in PATH
+- Docker
 - Bash 4.0 or later
 - Write permissions to configured directories
 
