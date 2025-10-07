@@ -64,7 +64,7 @@ if [[ ! -w "$SEMAPHORE_AND_LOG_DIR" ]]; then
 fi
 
 # Update script to execute if there's an update. Change this to your actual update script path.
-UPDATE_SCRIPT=${UPDATE_SCRIPT:-/home/steam/game-servers/icarus-update-containers.sh}
+UPDATE_SCRIPT=${UPDATE_SCRIPT:-/home/steam/icarus-update-check/icarus-update-containers.sh}
 
 # Convert branch to lowercase
 branch=$(echo "$BRANCH" | tr '[:upper:]' '[:lower:]')
