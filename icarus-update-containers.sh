@@ -42,6 +42,9 @@ done
 # Set default ENV_FILE if not provided
 ENV_FILE=${ENV_FILE:-~/.icarus/default}
 
+# Set default PRESERVE_BIN_DIR if not provided
+PRESERVE_BIN_DIR=${PRESERVE_BIN_DIR:-no}
+
 # Load variables from environment file if it exists
 if [[ -f "$ENV_FILE" ]]; then
     load_env_file "$ENV_FILE"
@@ -57,7 +60,7 @@ if [[ -z "$DOCKER_CONTAINER_LIST" ]]; then
 fi
 
 # ICARUS_SCRIPTS_DIR is the directory where the game server scripts are located
-ICARUS_SCRIPTS_DIR=${ICARUS_SCRIPTS_DIR:-/home/steam/game-servers}
+ICARUS_SCRIPTS_DIR=${ICARUS_SCRIPTS_DIR:-/home/steam/icarus-update-check}
 
 # BIN_DIR is where the Icarus server binaries will be installed by the first container to run.
 BIN_DIR=${BIN_DIR:-/home/steam/game-servers/icarus-bin}
@@ -106,7 +109,12 @@ for i in "${!docker_containers[@]}"; do
     
     # If this is the first container being processed, delete and recreate the BIN_DIR to ensure a fresh install
     if [[ "${first_container,,}" =~ ^(true|1|y|yes)$ ]] ; then
-        delete_bin_dir=yes
+        # Check if PRESERVE_BIN_DIR is set to preserve the binary directory
+        if [[ "${PRESERVE_BIN_DIR,,}" =~ ^(true|1|y|yes)$ ]]; then
+            delete_bin_dir=no
+        else
+            delete_bin_dir=yes
+        fi
         force_pull=yes
     else
         delete_bin_dir=no
