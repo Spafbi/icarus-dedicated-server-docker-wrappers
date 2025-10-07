@@ -57,6 +57,7 @@ NOTE: You will really want to edit the configuration files
    BIN_DIR=/home/steam/game-servers/icarus-bin
    DOCKER_CONTAINER_LIST=icarus-main
    ICARUS_SCRIPTS_DIR=/home/steam/icarus-update-check
+   PRESERVE_BIN_DIR=yes
    UPDATE_SCRIPT=/home/steam/icarus-update-check/icarus-update-containers.sh
    EOF
    ```
@@ -146,9 +147,17 @@ Handles the coordinated restart and update process for multiple Icarus server co
 **Parameters:**
 - `-e ENV_FILE`: Path to environment configuration file (default: `~/.icarus/default`)
 
+**Configuration Variables (set in `~/.icarus/default`):**
+- `PRESERVE_BIN_DIR`: Whether to preserve existing binary directory (default: `no`). Set to `yes`/`true`/`1`/`y` to keep existing binaries
+- `DOCKER_CONTAINER_LIST`: Comma-separated list of Docker container names to restart (required)
+- `ICARUS_SCRIPTS_DIR`: Directory where the game server scripts are located (default: `/home/steam/icarus-update-check`)
+- `BIN_DIR`: Directory where Icarus server binaries will be installed (default: `/home/steam/game-servers/icarus-bin`)
+- `REMOVE_OLD_CONTAINERS`: Whether to remove old containers before restarting (default: `true`)
+- `TIMEOUT`: Timeout in seconds to wait for successful startup in logs (default: `600`)
+
 **Key Features:**
 - Manages multiple containers simultaneously
-- Ensures clean binary installation for the first container
+- Ensures clean binary installation for the first container; can be disabled by setting PRESERVE_BIN_DIR (`yes`/`true`/`1`/`y`)
 - Monitors container logs for successful startup
 - Configurable timeout for startup validation
 - Optional removal of old containers for clean state
