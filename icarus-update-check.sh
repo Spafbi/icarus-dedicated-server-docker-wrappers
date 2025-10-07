@@ -63,8 +63,11 @@ if [[ ! -w "$SEMAPHORE_AND_LOG_DIR" ]]; then
     exit 1
 fi
 
+# Directory where the Icarus update scripts are located
+ICARUS_SCRIPTS_DIR=${ICARUS_SCRIPTS_DIR:-/home/steam/icarus-update-check}
+
 # Update script to execute if there's an update. Change this to your actual update script path.
-UPDATE_SCRIPT=${UPDATE_SCRIPT:-/home/steam/icarus-update-check/icarus-update-containers.sh}
+UPDATE_SCRIPT=${UPDATE_SCRIPT:-${ICARUS_SCRIPTS_DIR}/icarus-update-containers.sh}
 
 # Convert branch to lowercase
 branch=$(echo "$BRANCH" | tr '[:upper:]' '[:lower:]')
