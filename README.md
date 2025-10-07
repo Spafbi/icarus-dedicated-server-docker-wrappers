@@ -36,7 +36,7 @@ NOTE: You will really want to edit the configuration files
 1. **Clone the repository**:
    ```bash
    cd ~ # This changes to the current user's home directory
-   git clone https://github.com/Spafbi/icarus-dedicated-server-docker-wrappers.git
+   git clone https://github.com/Spafbi/icarus-dedicated-server-docker-wrappers.git icarus-update-check
    cd icarus-update-check
    ```
 
