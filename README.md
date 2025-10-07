@@ -58,7 +58,6 @@ NOTE: You will really want to edit the configuration files
    DOCKER_CONTAINER_LIST=icarus-main
    ICARUS_SCRIPTS_DIR=/home/steam/icarus-update-check
    PRESERVE_BIN_DIR=yes
-   UPDATE_SCRIPT=/home/steam/icarus-update-check/icarus-update-containers.sh
    EOF
    ```
 
