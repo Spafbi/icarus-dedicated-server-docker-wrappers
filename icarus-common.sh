@@ -107,7 +107,7 @@ STEAM_USERID=${STEAM_USERID:-$(id -u)}
 HOST_NETWORKING=${HOST_NETWORKING:-true} # Use host networking if true, otherwise use port mapping
 RESTART_CONTAINER=${RESTART_CONTAINER:-unless-stopped} # see https://docs.docker.com/reference/cli/docker/container/run/#restart
 SAVEGAMEONEXIT=${SAVEGAMEONEXIT:-True} # Whether to force save when the game exits (True/False)
-GAMESAVEFREQUENCY=${GAMESAVEFREQUENCY:-60} # How many seconds between each save
+GAMESAVEFREQUENCY=${GAMESAVEFREQUENCY:-600} # How many seconds between each save
 FIBERFOLIAGERESPAWN=${FIBERFOLIAGERESPAWN:-True} # Whether to have foliage that was removed respawns over time (True/False) (can help with performance)
 LARGESTONERESPAWN=${LARGESTONERESPAWN:-True} # Whether to have large stones that have been mined to respawn over time (True/False) (can help with performance)
 
