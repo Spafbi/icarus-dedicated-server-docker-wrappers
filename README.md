@@ -147,10 +147,10 @@ Handles the coordinated restart and update process for multiple Icarus server co
 - `-e ENV_FILE`: Path to environment configuration file (default: `~/.icarus/default`)
 
 **Configuration Variables (set in `~/.icarus/default`):**
-- `PRESERVE_BIN_DIR`: Whether to preserve existing binary directory (default: `no`). Set to `yes`/`true`/`1`/`y` to keep existing binaries
+- `BIN_DIR`: Directory where Icarus server binaries will be installed (default: `/home/steam/game-servers/icarus-bin`)
 - `DOCKER_CONTAINER_LIST`: Comma-separated list of Docker container names to restart (required)
 - `ICARUS_SCRIPTS_DIR`: Directory where the game server scripts are located (default: `/home/steam/icarus-update-check`)
-- `BIN_DIR`: Directory where Icarus server binaries will be installed (default: `/home/steam/game-servers/icarus-bin`)
+- `PRESERVE_BIN_DIR`: Whether to preserve existing binary directory (default: `no`). Set to `yes`/`true`/`1`/`y` to keep existing binaries
 - `REMOVE_OLD_CONTAINERS`: Whether to remove old containers before restarting (default: `true`)
 - `TIMEOUT`: Timeout in seconds to wait for successful startup in logs (default: `600`)
 
@@ -172,30 +172,34 @@ Update these to your desired values. Contains global settings shared across all 
 
 ```bash
 # Server Identity
-SERVERNAME=My Icarus Server
 ADMIN_PASSWORD=secure_admin_password
 JOIN_PASSWORD=optional_join_password
+SERVERNAME=My Icarus Server
 
 # Capacity and Networking
+HOST_NETWORKING=true
 MAX_PLAYERS=8
 PORT=17777
 QUERYPORT=27015
-HOST_NETWORKING=true
 
 # Directories
 BIN_DIR=/home/steam/game-servers/icarus-bin
 
 # Update Management
 BRANCH=public
-UPDATE_SCRIPT=/home/steam/icarus-update-check/icarus-update-containers.sh
 DOCKER_CONTAINER_LIST=icarus-main,icarus-experimental,icarus-private
+UPDATE_SCRIPT=/home/steam/icarus-update-check/icarus-update-containers.sh
 
 # Behavioral Settings
+ALLOW_NON_ADMINS_DELETE=False
+ALLOW_NON_ADMINS_LAUNCH=True
+FIBERFOLIAGERESPAWN=True
+GAMESAVEFREQUENCY=60
+LARGESTONERESPAWN=True
+RESUME_PROSPECT=True
+SAVEGAMEONEXIT=True
 SHUTDOWN_EMPTY_FOR=-1
 SHUTDOWN_NOT_JOINED_FOR=-1
-ALLOW_NON_ADMINS_LAUNCH=True
-ALLOW_NON_ADMINS_DELETE=False
-RESUME_PROSPECT=True
 ```
 
 #### Server-Specific Configuration (`~/.icarus/server` or `~/.icarus/container-name`)
@@ -213,17 +217,17 @@ SERVERNAME="Icarus Server #2"
 ### Configuration Variables
 
 #### Core Server Settings
-- **SERVERNAME**: Display name for the server
 - **ADMIN_PASSWORD**: Administrator password (required)
 - **JOIN_PASSWORD**: Password required to join server (optional)
 - **MAX_PLAYERS**: Maximum number of concurrent players (1-8)
 - **PORT**: Game server port (default: 17777)
 - **QUERYPORT**: Query port for server browser (default: 27015)
+- **SERVERNAME**: Display name for the server
 
 #### Directory Configuration
-- **DATA_PATH**: Directory for persistent server data (each server must have its own unique data path)
-- **BIN_DIR**: Directory for Icarus server binaries
-- **SEMAPHORE_AND_LOG_DIR**: Directory for update tracking and logs (default: /var/tmp)
+- **BIN_DIR**: Host directory for Icarus server binaries
+- **DATA_PATH**: Host directory for persistent server data (each server must have its own unique data path)
+- **SEMAPHORE_AND_LOG_DIR**: Host directory for update tracking and logs (default: /var/tmp)
 
 **Note**: Avoid using directory paths with spaces or non-alphanumeric characters, as these scripts have not been tested with such paths and may break. Additionally, `DATA_PATH` and `BIN_DIR` should never be the same directory.
 
@@ -232,23 +236,27 @@ SERVERNAME="Icarus Server #2"
 - **RESTART_CONTAINER**: Docker restart policy (default: unless-stopped)
 
 #### Game Behavior
+- **ALLOW_NON_ADMINS_DELETE**: Allow non-admins to delete prospects
+- **ALLOW_NON_ADMINS_LAUNCH**: Allow non-admins to start prospects
 - **BRANCH**: Steam branch to use (public/experimental)
+- **FIBERFOLIAGERESPAWN**: Whether foliage respawns over time (True/False) - can help with performance
+- **GAMESAVEFREQUENCY**: How many seconds between each save (default: 60)
+- **LARGESTONERESPAWN**: Whether large stones respawn over time (True/False) - can help with performance
+- **RESUME_PROSPECT**: Automatically resume the last prospect on startup
+- **SAVEGAMEONEXIT**: Whether to force save when the game exits (True/False)
 - **SHUTDOWN_EMPTY_FOR**: Auto-shutdown after empty time in seconds (-1 = disabled)
 - **SHUTDOWN_NOT_JOINED_FOR**: Auto-shutdown if no one joins in seconds (-1 = disabled)
-- **ALLOW_NON_ADMINS_LAUNCH**: Allow non-admins to start prospects
-- **ALLOW_NON_ADMINS_DELETE**: Allow non-admins to delete prospects
-- **RESUME_PROSPECT**: Automatically resume the last prospect on startup
 
 #### Update Management
-- **UPDATE_SCRIPT**: Path to the update script (for icarus-update-check.sh)
 - **DOCKER_CONTAINER_LIST**: Comma-separated list of containers to manage (container names must match their configuration file names)
 - **REMOVE_OLD_CONTAINERS**: Remove containers before restart (true/false)
 - **TIMEOUT**: Timeout in seconds for startup validation (default: 600)
+- **UPDATE_SCRIPT**: Path to the update script (for icarus-update-check.sh)
 
 #### Advanced Settings
-- **STEAM_USERID**: User ID for file ownership (default: current user)
-- **STEAM_GROUPID**: Group ID for file ownership (default: current group)
 - **STEAM_ASYNC_TIMEOUT**: Steam operation timeout in seconds
+- **STEAM_GROUPID**: Group ID for file ownership (default: current group)
+- **STEAM_USERID**: User ID for file ownership (default: current user)
 
 ## Multi-Server Setup
 
@@ -270,24 +278,24 @@ To run multiple Icarus servers:
 2. **Create server-specific configs** (each server must have unique ports and data paths):
    ```bash
    # ~/.icarus/icarus-main
-   SERVERNAME="Main Server"
    DATA_PATH=/home/steam/game-servers/icarus-main
    PORT=17777
    QUERYPORT=27015
+   SERVERNAME="Main Server"
    
    # ~/.icarus/icarus-experimental  
-   SERVERNAME="Experimental Server"
+   BRANCH=experimental
    DATA_PATH=/home/steam/game-servers/icarus-experimental
    PORT=17778
    QUERYPORT=27016
-   BRANCH=experimental
+   SERVERNAME="Experimental Server"
    
    # ~/.icarus/icarus-private
-   SERVERNAME="Private Server"
    DATA_PATH=/home/steam/game-servers/icarus-private
+   JOIN_PASSWORD="private123"
    PORT=17779
    QUERYPORT=27017
-   JOIN_PASSWORD="private123"
+   SERVERNAME="Private Server"
    ```
 
 3. **Deploy servers individually**:

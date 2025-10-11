@@ -106,6 +106,10 @@ STEAM_GROUPID=${STEAM_GROUPID:-$(id -g)}
 STEAM_USERID=${STEAM_USERID:-$(id -u)}
 HOST_NETWORKING=${HOST_NETWORKING:-true} # Use host networking if true, otherwise use port mapping
 RESTART_CONTAINER=${RESTART_CONTAINER:-unless-stopped} # see https://docs.docker.com/reference/cli/docker/container/run/#restart
+SAVEGAMEONEXIT=${SAVEGAMEONEXIT:-True} # Whether to force save when the game exits (True/False)
+GAMESAVEFREQUENCY=${GAMESAVEFREQUENCY:-60} # How many seconds between each save
+FIBERFOLIAGERESPAWN=${FIBERFOLIAGERESPAWN:-True} # Whether to have foliage that was removed respawns over time (True/False) (can help with performance)
+LARGESTONERESPAWN=${LARGESTONERESPAWN:-True} # Whether to have large stones that have been mined to respawn over time (True/False) (can help with performance)
 
 # Convert HOST_NETWORKING to lowercase for comparison
 HOST_NETWORKING_LOWER=$(echo "${HOST_NETWORKING}" | tr '[:upper:]' '[:lower:]')
@@ -195,6 +199,10 @@ if eval docker run -d \
   -e STEAM_GROUPID=\"${STEAM_GROUPID}\" \
   -e STEAM_ASYNC_TIMEOUT=\"${STEAM_ASYNC_TIMEOUT}\" \
   -e BRANCH=\"${BRANCH}\" \
+  -e SAVEGAMEONEXIT=\"${SAVEGAMEONEXIT}\" \
+  -e GAMESAVEFREQUENCY=\"${GAMESAVEFREQUENCY}\" \
+  -e FIBERFOLIAGERESPAWN=\"${FIBERFOLIAGERESPAWN}\" \
+  -e LARGESTONERESPAWN=\"${LARGESTONERESPAWN}\" \
   --name \"${CONTAINER_NAME}\" \
   nerodon/icarus-dedicated:latest; then
     echo "Container ${CONTAINER_NAME} started successfully"
